@@ -1,0 +1,31 @@
+name: Action-Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - action.yml
+      - .github/workflows/Action-Test.yml
+      - Modules/**
+      - Scripts/**
+      - Tests/**
+
+env:
+  TenantID: ${{ secrets.TENANT_ID }}
+  AppID: ${{ secrets.APP_ID }}
+  Subscription: ${{ secrets.SUBSCRIPTION }}
+  AppSecret: ${{ secrets.APP_SECRET }}
+
+jobs:
+  DefaultTest:
+    strategy:
+      matrix:
+        os: [ubuntu-latest,windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Connect to Azure
+        uses: equinor/AzConnect@v1
+
+      - name: Gather environment information
+        uses: equinor/AzGather@v1
