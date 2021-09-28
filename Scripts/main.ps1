@@ -11,7 +11,7 @@ Set-GitHubEnv -Name "EnvironmentID" -Value $EnvironmentID -Verbose
 Write-Output "$Task - Looking for monitoring Resource Group (RG):"
 $RGs = az group list -o json | ConvertFrom-JSON
 $RG = $RGs | Where-Object Name -match "$env:EnvironmentID-log"
-if($RG -ne $null){
+if($RG){
     Set-GitHubEnv -Name "Monitoring_RGName" -Value $RG[0].name -Verbose
     Set-GitHubEnv -Name "Monitoring_RGID" -Value $RG[0].id -Verbose
 }else{
@@ -21,7 +21,7 @@ if($RG -ne $null){
 Write-Output "$Task - Looking for monitoring Log Analytics workspace (LAW):"
 $LAWs = az monitor log-analytics workspace list -o json | ConvertFrom-JSON
 $LAW = $LAWs | Where-Object Name -match "$env:EnvironmentID-log"
-if($LAW -ne $null){
+if($LAW){
     Set-GitHubEnv -Name "Monitoring_LAWName" -Value $LAW[0].name -Verbose
     Set-GitHubEnv -Name "Monitoring_LAWID" -Value $LAW[0].id -Verbose
 }else{
@@ -32,7 +32,7 @@ Write-Output "$Task - Looking for monitoring Automation Account(AA):"
 az config set extension.use_dynamic_install=yes_without_prompt
 $AAs = az automation account list -o json | ConvertFrom-JSON
 $AA = $AAs | Where-Object Name -match "$env:EnvironmentID-log-AA"
-if($AA -ne $null){
+if($AA){
     Set-GitHubEnv -Name "Monitoring_AAName" -Value $AA[0].name -Verbose
     Set-GitHubEnv -Name "Monitoring_AAID" -Value $AA[0].id -Verbose
 }else{
